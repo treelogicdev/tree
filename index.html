@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Treelogic.Dev — Anurag</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel: rgba(255,255,255,0.03);
+      --text:#e6eef8;
+      --muted:#a9b3c7;
+      --accent:#6366f1;
+      --accent-2:#06b6d4;
+      --glass: rgba(255,255,255,0.03);
+      --radius:14px;
+      --maxw:1100px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(99,102,241,0.06), transparent),
+                  linear-gradient(180deg,var(--bg) 0%, #05060a 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      overflow-x:hidden;
+    }
+
+    video#bgVideo{
+      position:fixed; inset:0; width:100%; height:100%; object-fit:cover;
+      z-index:-2; opacity:0.12; pointer-events:none;
+    }
+
+    header{
+      position:sticky; top:0; z-index:30;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(2,6,23,0.45), rgba(2,6,23,0.25));
+      border-bottom:1px solid rgba(255,255,255,0.03);
+    }
+    .container{max-width:var(--maxw);margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:40px;height:40px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,0.06)}
+    .brand h1{font-size:16px;font-weight:700;color:var(--text);letter-spacing:0.2px}
+    nav{display:flex;gap:18px;align-items:center}
+    nav a{color:var(--muted);text-decoration:none;font-weight:600;font-size:14px;padding:8px;border-radius:8px;transition:all .18s}
+    nav a:hover, nav a:focus{color:var(--text);background:rgba(99,102,241,0.06);outline:none}
+
+    .ticker-wrap{overflow:hidden;border-top:1px solid rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
+    .ticker{display:inline-block;white-space:nowrap;padding:10px 0;animation:marquee 18s linear infinite}
+    .ticker span{display:inline-block;margin-right:38px;color:var(--muted);font-weight:600}
+    .ticker b{color:var(--accent);margin-right:6px}
+    @keyframes marquee{0%{transform:translateX(0%)}100%{transform:translateX(-50%)}}
+
+    .hero{max-width:var(--maxw);margin:36px auto 10px;padding:36px 20px;display:flex;gap:34px;align-items:center}
+    .hero-left{flex:1;min-width:260px}
+    .role{font-size:22px;color:var(--muted);font-weight:600;margin-bottom:8px}
+    .title{font-size:44px;line-height:1.03;margin-bottom:14px;font-weight:700; background: linear-gradient(90deg,var(--text), var(--accent)); -webkit-background-clip:text; color:transparent}
+    .lead{color:var(--muted);max-width:680px;margin-bottom:18px}
+
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;padding:11px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);
+      cursor:pointer;background:linear-gradient(180deg, rgba(99,102,241,0.12), rgba(99,102,241,0.06));color:var(--text);font-weight:700;text-decoration:none
+    }
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#4f46e5);box-shadow:0 6px 28px rgba(99,102,241,0.12)}
+    .btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
+
+    .hero-right{width:260px;display:flex;justify-content:center;align-items:center}
+    .avatar{
+      width:220px;height:220px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 20px 60px rgba(6,9,18,0.6);
+      display:flex;align-items:center;justify-content:center;position:relative;
+    }
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+
+    section.panel{max-width:var(--maxw);margin:30px auto;padding:28px 20px;border-radius:var(--radius);background:var(--panel);border:1px solid rgba(255,255,255,0.02)}
+    h2{color:var(--accent);font-size:20px;margin-bottom:10px}
+    p, li{color:var(--muted);font-size:15px}
+    ul.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;list-style:none;margin-top:12px;padding:0}
+    ul.skills li{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+
+    .projects-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:14px}
+    .project{
+      padding:14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.012), transparent);border:1px solid rgba(255,255,255,0.02);
+      transform: translateY(20px) scale(0.98); opacity:0; transition: all .55s cubic-bezier(.2,.9,.3,1);
+      min-height:100px;display:flex;flex-direction:column;gap:8px;
+    }
+    .project.show{transform:none;opacity:1}
+
+    .project h3{font-size:16px;color:var(--text);margin-bottom:4px}
+    .project p{font-size:13px;color:var(--muted);margin-bottom:6px}
+    .project .meta{margin-top:auto;color:var(--muted);font-size:13px}
+
+    .contact-grid{display:grid;grid-template-columns:1fr 280px;gap:18px}
+    .contact-card{padding:14px;border-radius:10px;background:linear-gradient(180deg, rgba(99,102,241,0.02), transparent);border:1px solid rgba(99,102,241,0.04)}
+
+    footer{max-width:var(--maxw);margin:30px auto;padding:16px 20px;color:var(--muted);font-size:13px;text-align:center}
+
+    .reveal{opacity:0;transform:translateY(18px);transition:all .6s ease}
+    .reveal.visible{opacity:1;transform:none}
+
+    @media (max-width:900px){
+      .hero{flex-direction:column-reverse;align-items:flex-start;padding:18px 20px}
+      .hero-right{width:100%;display:flex;justify-content:flex-start}
+      .avatar{width:140px;height:140px}
+      .contact-grid{grid-template-columns:1fr}
+      nav{display:none}
+    }
+
+    @media (max-width:480px){
+      .title{font-size:28px}
+      .role{font-size:13px}
+      .brand h1{font-size:14px}
+    }
+  </style>
+</head>
+<body>
+
+  <video id="bgVideo" autoplay muted loop playsinline>
+    <source src="assets/bgd.mp4" type="video/mp4">
+  </video>
+
+  <header>
+    <div class="container">
+      <div class="brand" aria-hidden="false">
+        <img src="assets/logo.jpg" alt="Treelogic.Dev logo" onerror="this.style.display='none'">
+        <h1>Treelogic.Dev</h1>
+      </div>
+
+      <nav aria-label="Primary navigation">
+        <a href="#home">Home</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+
+    <div class="ticker-wrap" role="status" aria-live="polite">
+      <div style="display:inline-block;padding-left:4px;">
+        <div class="ticker" aria-hidden="true">
+          <span><b>100+</b> Projects Delivered</span>
+          <span><b>4.8★</b> Average Client Rating</span>
+          <span><b>Trusted</b> Cyber-sec & Full-stack</span>
+          <span><b>Fast</b> Prototypes & Demos</span>
+          <span><b>100+</b> Projects Delivered</span>
+          <span><b>4.8★</b> Average Client Rating</span>
+          <span><b>Trusted</b> Cyber-sec & Full-stack</span>
+          <span><b>Fast</b> Prototypes & Demos</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="home" class="hero" role="main">
+    <div class="hero-left">
+      <div class="role">Full-Stack & Cyber-Security Developer</div>
+      <h2 class="title">Building secure, scalable web systems & tools</h2>
+      <p class="lead">I design modern frontends, build robust backends, and prototype security tooling — with a product-first approach and clean code.</p>
+
+      <div class="cta-row">
+        <!-- mailto connect — email address hidden from display, aria label generic -->
+        <a class="btn primary" href="mailto:treelogic.dev@gmail.com" id="connectBtn" aria-label="Connect via email">Connect</a>
+        <a class="btn ghost" href="#projects">View Projects</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="avatar" aria-hidden="false">
+        <img src="assets/anu.jpg" alt="Anurag portrait" onerror="this.style.background='linear-gradient(135deg,#1f2937,#111827)';this.alt='Avatar'">
+      </div>
+    </div>
+  </main>
+
+  <section id="skills" class="panel reveal">
+    <h2>Cyber Arsenal</h2>
+    <p>Technologies & tools I use to ship secure and beautiful products.</p>
+    <ul class="skills">
+      <li><strong>Frontend:</strong> React, Tailwind, TypeScript, GSAP</li>
+      <li><strong>Backend:</strong> Node.js, Express, PostgreSQL, Redis</li>
+      <li><strong>Security:</strong> Kali tools, OSINT, Traffic Analysis, Payload dev</li>
+      <li><strong>Tools:</strong> Docker, GitHub Actions, Figma, CLI tooling</li>
+    </ul>
+  </section>
+
+  <section id="projects" class="panel reveal" aria-labelledby="projectsHeading">
+    <h2 id="projectsHeading">Projects</h2>
+    <p>Selected demos, utilities, and prototypes. Click to explore (or ask for source).</p>
+
+    <div class="projects-list" id="projectsList">
+      <article class="project" tabindex="0">
+        <h3>Pixel Runner</h3>
+        <p>Vanilla JS endless runner with parallax layers & mobile controls — great for demoing gameplay loops.</p>
+        <div class="meta">HTML • JS • Canvas</div>
+      </article>
+
+      <article class="project" tabindex="0">
+        <h3>Dark Web Toolkit</h3>
+        <p>CLI toolkit for OSINT and recon flows. Built with modular commands and robust logging.</p>
+        <div class="meta">Python • CLI • OSINT</div>
+      </article>
+
+      <article class="project" tabindex="0">
+        <h3>Prompt Engine</h3>
+        <p>AI utility to generate TTS and images — includes presets for faster prototyping.</p>
+        <div class="meta">Node • APIs • Local-first</div>
+      </article>
+
+      <article class="project" tabindex="0">
+        <h3>Static Framework</h3>
+        <p>Mini static site builder for rapid documentation sites with templating and plugin support.</p>
+        <div class="meta">JS • Templating • CLI</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="contact" class="panel reveal">
+    <h2>Contact</h2>
+    <div class="contact-grid">
+      <div>
+        <p>Open for freelance, collaborations, and security audits. Send a short brief (what, when, budget) and I’ll reply quickly.</p>
+        <!-- Visible email removed per your request — use the Connect button to email -->
+        <p style="margin-top:10px"><strong>Email:</strong> <span style="color:var(--muted)">Hidden — use the Connect button</span></p>
+      </div>
+
+      <div class="contact-card" aria-hidden="false">
+        <p style="font-weight:700;color:var(--text)">Quick links</p>
+        <p style="margin-top:8px"><a href="https://github.com/anurvg" target="_blank" rel="noopener" style="color:var(--muted)">GitHub</a></p>
+        <p><a href="#projects" style="color:var(--muted)">View projects</a></p>
+        <p style="margin-top:12px;color:var(--muted);font-size:13px">Prefer sending a file? Zip your brief and attach to the email.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="year"></span> Treelogic.Dev • Built by Anurag — <span style="color:var(--muted)">portfolio-ready</span>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.18});
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    const projects = document.querySelectorAll('.project');
+    const projObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('show');
+          projObserver.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.18, rootMargin: "0px 0px -8% 0px"});
+
+    projects.forEach(p => projObserver.observe(p));
+
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const href = a.getAttribute('href');
+        if(href.length>1){
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if(target){
+            target.scrollIntoView({behavior:'smooth', block:'start'});
+            target.setAttribute('tabindex','-1');
+            target.focus({preventScroll:true});
+          }
+        }
+      });
+    });
+
+    const connectBtn = document.getElementById('connectBtn');
+    if(!connectBtn){
+      console.warn('Connect button not found; please ensure mailto link is present.');
+    }
+
+    const bgV = document.getElementById('bgVideo');
+    if(bgV) bgV.addEventListener('error', ()=>{ bgV.style.display = 'none' });
+
+    projects.forEach(p=>{
+      p.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter'){
+          p.classList.toggle('show');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
