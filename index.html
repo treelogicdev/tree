@@ -37,6 +37,23 @@
       overflow-x:hidden;
     }
 
+    /* --- COPY/DRAG PROTECTIONS --- */
+    /* Disable selection */
+    html, body, button, a, p, h1, h2, h3, div, li {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    /* Prevent image drag on supported browsers */
+    img {
+      -webkit-user-drag: none;
+      user-drag: none;
+      -webkit-touch-callout: none; /* iOS: disable callout */
+    }
+    /* end protections */
+
+    /* Optional background video — if file missing, gradient shows */
     video#bgVideo{
       position:fixed; inset:0; width:100%; height:100%; object-fit:cover;
       z-index:-2; opacity:0.12; pointer-events:none;
@@ -134,6 +151,7 @@
   <header>
     <div class="container">
       <div class="brand" aria-hidden="false">
+        <!-- use logo.jpg -->
         <img src="assets/logo.jpg" alt="Treelogic.Dev logo" onerror="this.style.display='none'">
         <h1>Treelogic.Dev</h1>
       </div>
@@ -169,7 +187,7 @@
       <p class="lead">I design modern frontends, build robust backends, and prototype security tooling — with a product-first approach and clean code.</p>
 
       <div class="cta-row">
-        <!-- mailto connect — email address hidden from display, aria label generic -->
+        <!-- mailto connect — email address hidden from display -->
         <a class="btn primary" href="mailto:treelogic.dev@gmail.com" id="connectBtn" aria-label="Connect via email">Connect</a>
         <a class="btn ghost" href="#projects">View Projects</a>
       </div>
@@ -177,7 +195,8 @@
 
     <div class="hero-right">
       <div class="avatar" aria-hidden="false">
-        <img src="assets/anu.jpg" alt="Anurag portrait" onerror="this.style.background='linear-gradient(135deg,#1f2937,#111827)';this.alt='Avatar'">
+        <!-- avatar uses f.jpg as requested -->
+        <img src="assets/f.jpg" alt="Anurag portrait" draggable="false" oncontextmenu="return false">
       </div>
     </div>
   </main>
@@ -229,7 +248,6 @@
     <div class="contact-grid">
       <div>
         <p>Open for freelance, collaborations, and security audits. Send a short brief (what, when, budget) and I’ll reply quickly.</p>
-        <!-- Visible email removed per your request — use the Connect button to email -->
         <p style="margin-top:10px"><strong>Email:</strong> <span style="color:var(--muted)">Hidden — use the Connect button</span></p>
       </div>
 
@@ -247,8 +265,10 @@
   </footer>
 
   <script>
+    // insert current year
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    // Intersection Observer for reveal animations (sections & projects)
     const revealElements = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry=>{
@@ -258,9 +278,9 @@
         }
       });
     }, {threshold: 0.18});
-
     revealElements.forEach(el => revealObserver.observe(el));
 
+    // Projects: observe each project card to animate in
     const projects = document.querySelectorAll('.project');
     const projObserver = new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{
@@ -270,9 +290,9 @@
         }
       });
     }, {threshold: 0.18, rootMargin: "0px 0px -8% 0px"});
-
     projects.forEach(p => projObserver.observe(p));
 
+    // Smooth anchor navigation and focus handling
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', e=>{
         const href = a.getAttribute('href');
@@ -288,14 +308,29 @@
       });
     });
 
-    const connectBtn = document.getElementById('connectBtn');
-    if(!connectBtn){
-      console.warn('Connect button not found; please ensure mailto link is present.');
-    }
+    // PROTECTIONS: prevent right-click, drag, and common shortcuts
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('dragstart', event => event.preventDefault());
 
-    const bgV = document.getElementById('bgVideo');
-    if(bgV) bgV.addEventListener('error', ()=>{ bgV.style.display = 'none' });
+    document.addEventListener('keydown', function(e) {
+      // block Ctrl/Cmd + U (view source), S (save), P (print), Shift+Ctrl+I (devtools), F12, Ctrl+Shift+J/C
+      const key = e.key.toLowerCase();
+      if ((e.ctrlKey || e.metaKey) && (key === 'u' || key === 's' || key === 'p' || key === 'c' || key === 'x' || key === 'a')) {
+        e.preventDefault();
+      }
+      if (e.key === 'F12') e.preventDefault();
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) e.preventDefault();
+      // also block Ctrl+Shift+I via lowercase check fallback
+      if (e.ctrlKey && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) e.preventDefault();
+    });
 
+    // make images non-draggable and block contextmenu on images specifically
+    document.querySelectorAll('img').forEach(img=>{
+      img.setAttribute('draggable','false');
+      img.addEventListener('contextmenu', e => e.preventDefault());
+    });
+
+    // Keyboard-friendly project activation (Enter key toggles)
     projects.forEach(p=>{
       p.addEventListener('keydown', (e)=>{
         if(e.key === 'Enter'){
@@ -305,4 +340,4 @@
     });
   </script>
 </body>
-</html>
+  </html>
